@@ -36,6 +36,7 @@ int main()
 	RunBlank();
 	RunBST();
 	RunAVL();
+	RunRBT();
     return 0;
 }
 
@@ -109,14 +110,9 @@ void RunBST()
 		if (IsDelimiter && !WasDelimiter)
 		{
 			WasDelimiter = true;
-			//treeRBT;
-			//treeAVL;
 			strWord = string(chari);
 			intWordCount++;
-			if (intWordCount == 4799) cout << strWord << endl;
 			treeBST.Insert(strWord);
-			//treeBST;
-
 			for (int i = 0; i < 75; i++) chari[i] = '\0';
 			iPtr = 0;
 		}
@@ -164,13 +160,9 @@ void RunAVL()
 		if (IsDelimiter && !WasDelimiter)
 		{
 			WasDelimiter = true;
-			//treeRBT;
-			//treeAVL;
 			strWord = string(chari);
 			intWordCount++;
-			cout << strWord << intWordCount << endl;
 			treeAVL.Insert(strWord);
-			//treeBST;
 
 			for (int i = 0; i < 75; i++) chari[i] = '\0';
 			iPtr = 0;
@@ -189,9 +181,60 @@ void RunAVL()
 	}
 	inFile.close();
 	t = clock() - t;
-	treeBST.Traverse();
+	treeAVL.Traverse();
 	cout << intWordCount << "\t" << treeAVL.GetNodeCount() << "\t" << treeAVL.GetPointerChanges() << "\t" << treeAVL.GetComparisonCount() << endl;
 	cout << "It took " << t << " clocks" << endl;
-	cin;
+}
+
+void RunRBT()
+{
+	intWordCount = 0;
+	for (int i = 0; i < 75; i++) chari[i] = '\0';
+
+
+	inFile.open(fileName, ios::binary);
+	if (inFile.fail())
+	{
+		cout << "Unable to open input file\n\n" << "Program Exiting\n\nPress ENTER to exit\n";
+		cin.get(c);
+		exit(1);
+	}
+	clock_t t;
+	t = clock();
+	iPtr = 0;
+	inFile.get(c);
+	while (!inFile.eof())
+	{
+		IsDelimiter = (c == 32 || c == 10 || c == 13 || c == 9 ||
+			c == '.' || c == ',' || c == '!' || c == ';' ||
+			c == ':' || c == '(' || c == ')');
+		if (IsDelimiter && !WasDelimiter)
+		{
+			WasDelimiter = true;
+			strWord = string(chari);
+			intWordCount++;
+			treeRBT.Insert(strWord);
+
+			for (int i = 0; i < 75; i++) chari[i] = '\0';
+			iPtr = 0;
+		}
+		else if (!IsDelimiter)
+		{
+			chari[iPtr] = c;
+			iPtr++;
+		}
+		else if (IsDelimiter && WasDelimiter)
+		{
+			// Do Nothing
+		}
+		WasDelimiter = IsDelimiter;
+		inFile.get(c);
+	}
+	inFile.close();
+	t = clock() - t;
+	treeRBT.Traverse();
+	cout << intWordCount << "\t" << treeRBT.GetNodeCount() << "\t" << treeRBT.GetPointerChanges() << "\t" << treeRBT.GetComparisonCount() << endl;
+	cout << "It took " << t << " clocks" << endl;
+	cin.get(c);
 }
 

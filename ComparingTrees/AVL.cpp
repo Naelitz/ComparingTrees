@@ -164,8 +164,8 @@ void AVL::Insert(std::string chWord)
 			// <<< LEFT FOR YOU TO WRITE, BUT HERE’S >>>
 			// <<< A HEAD START (4 LOC here)         >>>
 			C = B->GetLeftChild();
-			CL = C->GetRightChild();
-			CR = C->GetLeftChild();
+			CL = C->GetLeftChild();
+			CR = C->GetRightChild();
 
 			B->SetLeftChild(CR);
 			A->SetRightChild(CL);
