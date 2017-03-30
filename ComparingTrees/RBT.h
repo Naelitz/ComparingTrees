@@ -19,10 +19,10 @@ private:
 	RBTNode* Root;
 	RBTNode* nil;
 	int intPointerChanges = 0;
-	int intBalanceFactor = 0;
 	int intNodeCount = 0;
 	int intComparisonCount = 0;
 	int intHeight = 0;
+	int intColorChanges = 0;
 	void Traversal(RBTNode* startNode);
 };
 

@@ -8,9 +8,12 @@ RBT::RBT()
 	nil = new RBTNode();
 	nil->SetKeyValue("");
 	nil->SetColor(false);
+	intColorChanges++;
 	nil->SetLeftChild(nil);
 	nil->SetRightChild(nil);
 	nil->SetParent(nil);
+	nil->AddPointerChanges(4);
+	Root = nil;
 }
 
 void RBT::Insert(std::string chWord)
@@ -35,35 +38,46 @@ void RBT::Insert(std::string chWord)
 		y = x;
 		if (x->GetKeyValue() == chWord)
 		{
+			intComparisonCount++;
 			x->IncrementOccurences();
 			return;
 		}
 
 		else if (z->GetKeyValue() < x->GetKeyValue())
 		{
+			intComparisonCount += 2;
 			x = x->GetLeftChild();
 		}
 		else
 		{
+			intComparisonCount += 2;
 			x = x->GetRightChild();
 		}
 	}
 	z->SetParent(y);
+	z->AddPointerChanges(1);
 	if (y == nil)
 	{
+		intComparisonCount++;
 		Root = z;
 	}
 	else
 	{
 		if (z->GetKeyValue() < y->GetKeyValue())
 		{
+			intComparisonCount += 2;
+			y->AddPointerChanges(1);
 			y->SetLeftChild(z);
 		}
 		else
 		{
+			intComparisonCount += 2;
+			y->AddPointerChanges(1);
 			y->SetRightChild(z);
 		}
 	}
+	z->AddPointerChanges(2);
+	intColorChanges++;
 	z->SetLeftChild(nil);
 	z->SetRightChild(nil);
 	z->SetColor(true);
@@ -122,35 +136,40 @@ void RBT::Fixup(RBTNode* startNode)
 			}
 		}
 	}
+	Root->SetColor(false);
 }
 
 void RBT::RightRotate(RBTNode* z)
 {
 	auto y = z->GetLeftChild();
-	z->SetRightChild(y->GetRightChild());
-	//todo:Reference + 1
+	z->SetLeftChild(y->GetRightChild());
+	z->AddPointerChanges(1);
 
 	if (y->GetRightChild() != nil)
 	{
-		//todo:Reference + 1;
+		y->GetRightChild()->AddPointerChanges(1);
 		y->GetRightChild()->SetParent(z);
 	}
 
-	//todo:References + 4
+	y->AddPointerChanges(1);
 	y->SetParent(z->GetParent());
 	if (z->GetParent() == nil)
 	{
 		Root = y;
+		Root->AddPointerChanges(1);
 	}
 	else if (z == z->GetParent()->GetRightChild())
 	{
 		z->GetParent()->SetRightChild(y);
+		z->GetParent()->AddPointerChanges(1);
 	}
 	else
 	{
+		z->GetParent()->AddPointerChanges(1);
 		z->GetParent()->SetLeftChild(y);
 	}
-
+	y->AddPointerChanges(1);
+	z->AddPointerChanges(1);
 	y->SetRightChild(z);
 	z->SetParent(y);
 }
@@ -159,29 +178,33 @@ void RBT::LeftRotate(RBTNode* z)
 {
 	auto y = z->GetRightChild();
 	z->SetRightChild(y->GetLeftChild());
-	//todo: Reference + 1
+	z->AddPointerChanges(1);
 
 	if (y->GetLeftChild() != nil)
 	{
 		y->GetLeftChild()->SetParent(z);
-		//todo: Reference + 1
+		y->GetLeftChild()->AddPointerChanges(1);
 	}
 
-	//todo: Reference + 4
+	y->AddPointerChanges(1);
 	y->SetParent(z->GetParent());
 	if (z->GetParent() == nil)
 	{
 		Root = y;
+		Root->AddPointerChanges(1);
 	}
 	else if (z == z->GetParent()->GetLeftChild())
 	{
 		z->GetParent()->SetLeftChild(y);
+		z->GetParent()->AddPointerChanges(1);
 	}
 	else
 	{
 		z->GetParent()->SetRightChild(y);
+		z->GetParent()->AddPointerChanges(1);
 	}
-
+	y->AddPointerChanges(1);
+	z->AddPointerChanges(1);
 	y->SetLeftChild(z);
 	z->SetParent(y);
 }
@@ -193,12 +216,11 @@ void RBT::Traverse()
 
 void RBT::Traversal(RBTNode* startNode)
 {
-	if (startNode != nil || startNode != nullptr)
+	if (startNode != nil && startNode != nullptr)
 	{
 		Traversal(startNode->GetLeftChild());
 		intPointerChanges += startNode->GetPointerChanges();
 		intNodeCount++;
-		cout << startNode->GetKeyValue() << endl;
 		Traversal(startNode->GetRightChild());
 	}
 }

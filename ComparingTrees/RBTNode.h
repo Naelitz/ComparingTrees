@@ -16,6 +16,7 @@ public:
 	RBTNode* GetLeftChild();
 	RBTNode* GetRightChild();
 	RBTNode* GetParent();
+	void AddPointerChanges(int num);
 	int GetPointerChanges();
 	bool IsRed();
 private:

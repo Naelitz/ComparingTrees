@@ -16,7 +16,7 @@ public:
 private:
 	AVLNode* ptrCurrentNode;
 	int intPointerChanges = 0;
-	int intBalanceFactor = 0;
+	int intBalanceFactorChanges = 0;
 	int intNodeCount = 0;
 	int intComparisonCount = 0;
 	int intHeight = 0;

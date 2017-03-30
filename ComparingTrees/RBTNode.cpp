@@ -59,6 +59,12 @@ RBTNode* RBTNode::GetParent()
 	return parent;
 }
 
+void RBTNode::AddPointerChanges(int num)
+{
+	intPointerChanges += num;
+}
+
+
 int RBTNode::GetPointerChanges()
 {
 	return intPointerChanges;
