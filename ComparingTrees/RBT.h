@@ -13,6 +13,7 @@ public:
 	void RightRotate(RBTNode* z);
 	void LeftRotate(RBTNode* z);
 	int GetPointerChanges();
+	int GetColorChanges();
 	int GetComparisonCount();
 	int GetNodeCount();
 private:

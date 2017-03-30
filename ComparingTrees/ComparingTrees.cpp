@@ -132,7 +132,10 @@ void RunBST()
 	t = clock() - t;
 	treeBST.Traverse();
 	cout << "Run Time\tTotal Words\tDistinct\tPointer Change\tCompares\tReference" << endl;
-	cout << t << "\t" << intWordCount << "\t" << treeBST.GetNodeCount() << "\t" << treeBST.GetPointerChanges() << "\t" << treeBST.GetComparisonCount() << endl;
+	cout << t << "\t" << intWordCount 
+	<< "\t" << treeBST.GetNodeCount() 
+	<< "\t" << treeBST.GetPointerChanges() 
+	<< "\t" << treeBST.GetComparisonCount() << endl;
 }
 
 void RunAVL()
@@ -182,7 +185,10 @@ void RunAVL()
 	inFile.close();
 	t = clock() - t;
 	treeAVL.Traverse();
-	cout << t << "\t" << intWordCount << "\t" << treeAVL.GetNodeCount() << "\t" << treeAVL.GetPointerChanges() << "\t" << treeAVL.GetComparisonCount() << endl;
+	cout << t << "\t" << intWordCount 
+	<< "\t" << treeAVL.GetNodeCount() 
+	<< "\t" << treeAVL.GetPointerChanges() 
+	<< "\t" << treeAVL.GetComparisonCount() << endl;
 }
 
 void RunRBT()
@@ -232,7 +238,11 @@ void RunRBT()
 	inFile.close();
 	t = clock() - t;
 	treeRBT.Traverse();
-	cout << t << "\t" << intWordCount << "\t" << treeRBT.GetNodeCount() << "\t" << treeRBT.GetPointerChanges() << "\t" << treeRBT.GetComparisonCount() << endl;
+	cout << "RBT\t" <<  t << "\t" << intWordCount 
+	<< "\t" << treeRBT.GetNodeCount() << "\t" 
+	<< treeRBT.GetPointerChanges() << "\t" 
+	<< treeRBT.GetComparisonCount() << "\t" 
+	<< treeRBT.GetColorChanges() << endl;
 	cin.get(c);
 }
 
