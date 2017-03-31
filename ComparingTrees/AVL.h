@@ -1,3 +1,9 @@
+// AVL.h
+// Author: David Naelitz
+// Written for EECS2510 Fall 2017
+// Date: 3/25/2017
+// Description: This is the header file the AVL tree object
+
 #pragma once
 #include "AVLNode.h"
 
@@ -11,7 +17,9 @@ public:
 
 	int GetPointerChanges();
 	int GetComparisonCount();
+	int GetHeight();
 	int GetNodeCount();
+	int GetBalanceChanges();
 	AVLNode* Root;
 private:
 	AVLNode* ptrCurrentNode;
@@ -20,6 +28,6 @@ private:
 	int intNodeCount = 0;
 	int intComparisonCount = 0;
 	int intHeight = 0;
-	void Traversal(AVLNode* startNode);
+	void Traversal(AVLNode* startNode, int height);
 };
 

@@ -1,3 +1,9 @@
+// RBT.h
+// Author: David Naelitz
+// Written for EECS2510 Fall 2017
+// Date: 3/25/2017
+// Description: This is the header file for the red black tree. 
+
 #pragma once
 #include <string>
 #include "RBTNode.h"
@@ -16,6 +22,7 @@ public:
 	int GetColorChanges();
 	int GetComparisonCount();
 	int GetNodeCount();
+	int GetHeight();
 private:
 	RBTNode* Root;
 	RBTNode* nil;
@@ -24,6 +31,6 @@ private:
 	int intComparisonCount = 0;
 	int intHeight = 0;
 	int intColorChanges = 0;
-	void Traversal(RBTNode* startNode);
+	void Traversal(RBTNode* startNode, int height);
 };
 

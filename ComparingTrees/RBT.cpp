@@ -1,3 +1,11 @@
+// RBT.cpp
+// Author: David Naelitz
+// Written for EECS2510 Fall 2017
+// Date: 3/25/2017
+// Description: This is the RBT file that will take care of all the functions required
+// for the tree. This includes inserting, balancing / rotating. Balancing in this instance
+// is done by following the red black tree rules.
+
 #include "stdafx.h"
 #include "RBT.h"
 #include <iostream>
@@ -15,9 +23,9 @@ RBT::RBT()
 	//Root = nil;
 }
 
-void RBT::Insert(std::string chWord)
+void RBT::Insert(std::string chWord)	//Insert node with key value chWord into this tree
 {
-	if (Root == nullptr)
+	if (Root == nullptr)		//If nothing has been put in the tree yet make root and return.
 	{
 		Root = new RBTNode();
 		Root->SetKeyValue(chWord);
@@ -28,15 +36,16 @@ void RBT::Insert(std::string chWord)
 		intColorChanges++;
 		return;
 	}
-	auto z = new RBTNode();
+	auto z = new RBTNode();		//Create new node
 	z->SetKeyValue(chWord);
-	RBTNode* y = nullptr;
-	RBTNode* x = Root;
+	RBTNode* y = nullptr;		//y lags one step behind x (y is x's parent)
+	RBTNode* x = Root;			//x searches for insertion point
 	while (x != nil)
 	{
 		y = x;
-		if (x->GetKeyValue() == chWord)
+		if (x->GetKeyValue() == chWord) //This tree allows for duplicates
 		{
+			//This node already exists so just increment its occurences and return
 			intComparisonCount++;
 			x->IncrementOccurences();
 			return;
@@ -54,15 +63,15 @@ void RBT::Insert(std::string chWord)
 		}
 	}
 	z->SetParent(y);
-	if (y == nil)
-	{
+	if (y == nil)	//If the Tree was empty, our new node z becomes
+	{				//the new root
 		intComparisonCount++;
 		Root = z;
 	}
 	else
 	{
-		if (z->GetKeyValue() < y->GetKeyValue())
-		{
+		if (z->GetKeyValue() < y->GetKeyValue())	//Otherwise, z must be either y's new
+		{											//left or right child (per BST property)
 			intComparisonCount += 2;
 			y->SetLeftChild(z);
 		}
@@ -73,15 +82,17 @@ void RBT::Insert(std::string chWord)
 		}
 	}
 	intColorChanges++;
-	z->SetLeftChild(nil);
-	z->SetRightChild(nil);
-	z->SetColor(true);
-	Fixup(z);
+	z->SetLeftChild(nil);						//Our new node is at the bottom...
+	z->SetRightChild(nil);						//.. of the tree, so its children are nil
+	z->SetColor(true);							//Color this node red for now (may not be a safe decision)
+	Fixup(z);									//Fix anything we broke.
 }
 
 
 void RBT::Fixup(RBTNode* startNode)
 {
+	//This fixes the tree after an insert incase we broke the rules for a red black tree.
+	//this is handled by solving for 3 different cases.
 	while (startNode->GetParent()->IsRed())
 	{
 		if (startNode->GetParent() == startNode->GetParent()->GetParent()->GetLeftChild())
@@ -91,25 +102,26 @@ void RBT::Fixup(RBTNode* startNode)
 			if (y->IsRed())
 			{
 				intColorChanges += 3;
-				startNode->GetParent()->SetColor(false);
-				y->SetColor(false);
-				startNode->GetParent()->GetParent()->SetColor(true);
-				startNode = startNode->GetParent()->GetParent();
+				startNode->GetParent()->SetColor(false);				//Case 1 (re-color only)
+				y->SetColor(false);										//Case 1
+				startNode->GetParent()->GetParent()->SetColor(true);	//Case 1
+				startNode = startNode->GetParent()->GetParent();		//Case 1
 			}
 			else
 			{
-				if (startNode == startNode->GetParent()->GetRightChild())
+				if (startNode == startNode->GetParent()->GetRightChild()) //Is z the right child of its parent?
 				{
-					startNode = startNode->GetParent();
-					LeftRotate(startNode);
+					startNode = startNode->GetParent();					//Case 2
+					LeftRotate(startNode);								//Case 2
 				}
+				//wether we have a case 2 or not we have a case 3
 				intColorChanges += 2;
-				startNode->GetParent()->SetColor(false);
-				startNode->GetParent()->GetParent()->SetColor(true);
-				RightRotate(startNode->GetParent()->GetParent());
+				startNode->GetParent()->SetColor(false);				//Case 3
+				startNode->GetParent()->GetParent()->SetColor(true);	//Case 3
+				RightRotate(startNode->GetParent()->GetParent());		//Case 3
 			}
 		}
-		else
+		else   //"else" clase is symmetric to "then" clause above
 		{
 			auto y = new RBTNode();
 			y = startNode->GetParent()->GetParent()->GetLeftChild();
@@ -136,7 +148,7 @@ void RBT::Fixup(RBTNode* startNode)
 		}
 	}
 	intColorChanges++;
-	Root->SetColor(false);
+	Root->SetColor(false); //Make sure root is black according to RBT rules.
 }
 
 void RBT::RightRotate(RBTNode* z)
@@ -195,17 +207,21 @@ void RBT::LeftRotate(RBTNode* z)
 
 void RBT::Traverse()
 {
-	Traversal(Root);
+	Traversal(Root, 1);
 }
 
-void RBT::Traversal(RBTNode* startNode)
+void RBT::Traversal(RBTNode* startNode, int height)
 {
+	//This function steps through the tree and collects the height of each tree and records the highest
+	//height as the height of the tree. As it stops at each node it also gets the statistics needed from each
+	//node and increments how many nodes are in the tree.
 	if (startNode != nil && startNode != nullptr)
 	{
-		Traversal(startNode->GetLeftChild());
+		if (height > intHeight)intHeight = height;
+		Traversal(startNode->GetLeftChild(), height+1);
 		intPointerChanges += startNode->GetPointerChanges();
 		intNodeCount++;
-		Traversal(startNode->GetRightChild());
+		Traversal(startNode->GetRightChild(), height+1);
 	}
 }
 
@@ -213,6 +229,12 @@ int RBT::GetNodeCount()
 {
 	return intNodeCount;
 }
+
+int RBT::GetHeight()
+{
+	return intHeight;
+}
+
 
 int RBT::GetPointerChanges()
 {

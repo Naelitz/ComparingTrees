@@ -1,3 +1,10 @@
+// RBTNode.cpp
+// Author: David Naelitz
+// Written for EECS2510 Fall 2017
+// Date: 3/25/2017
+// Description: This is the node file for the red black tree. This allows the tree 
+// to call getter and setters for the different functions needed in the tree.
+
 #include "stdafx.h"
 #include "RBTNode.h"
 
